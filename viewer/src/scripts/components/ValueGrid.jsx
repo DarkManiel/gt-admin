@@ -14,25 +14,62 @@ var Row = require("react-bootstrap/Row");
 var ValueGrid = React.createClass({
 	getInitialState: function() {
     return {
-      values : []
+      values : [],
+      numCols : null
     };
   },
+
+//   componentWillReceiveProps: function(nextProps) {
+//     console.log('recieved props &&&', nextProps);
+//   this.setState({
+//     values : nextProps
+//   });
+// },
 	
 	render: function() {
 
 	var css = {
-		'width' : '100%'};
-    //var valGrid = this.valuegrid;
-    console.log('state ', this.state)
-    console.log('props', this.props)
-    console.log('this ', this)
+		'width' : '100%',
+		'margin-left' : '5px',
+		'margin-right' : '5px'
+	};
 
-    var gridTh = _.map([1,2,3,4], function(val){
-    	return <th>{val}</th>;
-    });
+	var minHeight = {//min-height not working so used height
+		'height' : '25px'
+	};
 
-    var gridTr = _.map([5,6,7,8], function(){
-    	return <tr>{ gridTh }</tr>
+    var numCols = this.props.numCols;
+    var vals = this.props.values;
+
+    var getMat = function(numCols, vals){
+
+    	var mat = [];
+    	if(vals != null){
+    	for(var i = 0; i < numCols; i ++){
+    		var temp = [];
+    		for (var j = 0; j < numCols; j ++){
+    			if (vals[i] === "\"\""){
+    				temp.push( );
+    			}else{
+    				temp.push(vals[i]);    				
+    			}
+    		}
+    		mat.push(temp);
+    	}
+    	}
+    	return mat;
+    }
+
+    var mat = getMat(numCols, vals);
+
+    var gridTh = function(){
+    	return _.map(mat, function(val){
+    	return <th style= {minHeight}>{val}</th>;
+    })
+    };
+
+    var gridTr = _.map(mat, function(vals){
+    	return <tr >{ gridTh(vals.length) }</tr>
     });
     return (
     			<Table striped bordered condensed hover style = {css}>

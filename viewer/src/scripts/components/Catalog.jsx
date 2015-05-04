@@ -12,7 +12,6 @@ var _     = require("underscore");
 
 var Catalog = React.createClass({
   handleSelectLayer: function(entry) {
-    console.log('IS THIS NEVER CALLED???? Catalog entry:', entry)
     this.props.active.set(
       {
         'entry': entry,
@@ -30,7 +29,6 @@ var Catalog = React.createClass({
 
     var layerList = _.map(_.keys(layerGroups), function(layerName) {  
       var entries = _.sortBy(layerGroups[layerName], function(e) { return e.layer.zoom });
-      console.log('in catalog. layerlist -> entries: ', entries)
       return (<CatalogLayer url={self.props.url} active={self.props.active} layerName={layerName} entries={entries} />);
     });
 

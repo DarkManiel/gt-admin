@@ -45,7 +45,8 @@ var LeafletMap = React.createClass({
 
   getInitialState: function() {
     return {
-      values : []
+      values : [],
+      numCols : null
     };
   },
 
@@ -59,36 +60,19 @@ var LeafletMap = React.createClass({
     this_map = this.map;
   },
   valuegrid: function(e){
-    console.log('onclick worked!');
-    console.log('e is " ',e);
-    console.log('e x is: ', e.pageX)
-    console.log('e y is: ', e.pageY)
-    //var layer = this.props.entries[0].layer;
     var active = this.props.active; 
-    console.log('active :', active)
     
-    var entry = this.props.active.entry;
-    console.log('entry:', entry)
+    var entry = active.entry;
     var entries = this.props.entries;
-     var clickOptions = _.map(entries, function(e) {
-         console.log('For clickOptions after click, e is: ', e);
+    var clickOptions = _.map(entries, function(e) {
          return e;
-     });
-
-     console.log('name is ', active.entry.layer.name )
+    });
 
     var mousePoint = this.map.mouseEventToLayerPoint(e);
-    console.log('mousePoint is: ', mousePoint);
     var latLng = this.map.layerPointToLatLng(mousePoint);
-    console.log('mouseLatLng is : ', latLng);
-    console.log('layer is: ', active.entry.layer.name)
-    console.log('zoom is: ', active.entry.layer.zoom)
-    console.log('props is : ', this.props);
-    $.get(this.props.Url + "/valuegrid?layer=" + active.entry.layer.name + "&zoom=" + active.entry.layer.zoom + "&lat=" + latLng.lat + "&lng=" + latLng.lng + "&x=" + mousePoint.x + "&y=" + mousePoint.y, 
+    $.get(this.props.Url + "/valuegrid?layer=" + active.entry.layer.name + "&zoom=" + active.entry.layer.zoom + "&lat=" + latLng.lat + "&lng=" + latLng.lng + "&x=" + mousePoint.x + "&y=" + mousePoint.y + "&size=3", 
       function(data) {
-        console.log('data is ', data);
-        this.setState({ values: data.values }) 
-        console.log('values are now ', this.state.values)
+        this.setState({ values: data.values, numCols: data.numCols }) 
       //   if (this.isMounted()) { this.setProps({ values: data.values }) };
       //     console.log('values are now ', this.props.values)
        }.bind(this)
@@ -135,7 +119,7 @@ var LeafletMap = React.createClass({
     } 
     
     return (
-      <ModalTrigger modal={<ValueModal values = {this.state.values}/>}>
+      <ModalTrigger modal={<ValueModal values = {this.state.values} numCols = {this.state.numCols}/>}>
       <div className="leafletMap" id="map" onClick={this.valuegrid} />
        </ModalTrigger>
     );
