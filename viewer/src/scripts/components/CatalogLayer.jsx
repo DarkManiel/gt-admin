@@ -19,6 +19,7 @@ var _     = require("underscore");
 var CatalogLayer = React.createClass({
   getInitialState: function() {
     var layer = this.props.entries[0].layer;
+    console.log('LAYER IS : ', layer)
 
     $.get(this.props.url + "/catalog/" + layer.name + "/" + layer.zoom + "/bands", 
       function(bands) {
@@ -61,15 +62,19 @@ var CatalogLayer = React.createClass({
     var layer = entry.layer;
 
     var zoomOptions = _.map(entries, function(e) {
+      console.log('For zoomoptions, e is: ', e)
       return <option value={e.layer.zoom}>{e.layer.zoom}</option>;
     })
 
-    var bandOptions = _.map(this.state.bands.time, function(time) {    
+    var bandOptions = _.map(this.state.bands.time, function(time) {  
+        console.log('time (array?): ', {time})  
       return <option value={time}>{time}</option>;        
     });
+    console.log('bandoptions: ', bandOptions)
+    console.log('handleSelectLayer is: ', this.handleSelectLayer)
 
     if (bandOptions.length > 0){ //provide a selector for bands with values, none for those without
-      return (        
+      return (      
           <tr>
             <td>
               <Button onClick={this.handleSelectLayer} bsStyle="primary" bsSize="xsmall">{ this.props.layerName }</Button>        
@@ -80,7 +85,8 @@ var CatalogLayer = React.createClass({
             <td>
                 <select ref="band">{ bandOptions }</select>
             </td>
-          </tr>);
+          </tr>
+          );
     }else{
       return(
            <tr>
@@ -90,7 +96,8 @@ var CatalogLayer = React.createClass({
               <td>
                   <select ref="zoom">{ zoomOptions }</select>
               </td>
-            </tr>);
+            </tr>
+  );
     }
 
   }  
