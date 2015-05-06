@@ -14,45 +14,29 @@ var props = {};
 var ValueModal = React.createClass({
 
   getInitialState: function() {
-    console.log('initial state', this.props)
     return {
-      values : []
+      values : [],
+      numCols : ""
     };
   },
 
-  componentDidMount: function() {
-    $.get(this.props.source, function(props) {
-      if (this.isMounted()) {
-        //console.log('props: ', props)
-        this.setState({
-          values : props.values
-        });
-      }
-    }.bind(this));
-  },
-
   componentWillReceiveProps: function(nextProps) {
-    console.log('recieved props &&&', nextProps);
   this.setState({
-    values : nextProps
+    values : nextProps.values,
+    numCols : nextProps.numCols
   });
 },
 
-  // shouldComponentUpdate: function(nextProps, nextState) {
-  //   console.log('updated!!!!!!!!!!!!!!!!!!!!!!!!!!!! nestprops', nextProps)
-  //   console.log('updated!!!!!!!!!!!!!!!!!!!!!!!!!!!! nextState', nextState)
-  // return nextProps.id !== this.props.id;
-  // },
 
   render: function() {
     return (
-      <Modal props={props} bsStyle='primary' title='Modal heading' animation={false}>
+      <Modal props={props} bsStyle='primary' title='Value Grid' animation={false}>
         <div className='modal-body'>
      
-          <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+          <p>Geotrellis value grid</p>
 
           <div>
-          <ValueGrid values = {this.props.values} />
+          <ValueGrid values = {this.props.values} numCols = {this.props.numCols}/>
           </div>
 
           <hr />
