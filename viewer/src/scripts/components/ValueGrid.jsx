@@ -5,7 +5,6 @@
 
 var React = require('react');
 var _     = require("underscore");
-var Modal = require("react-bootstrap/Modal");
 var Button = require("react-bootstrap/Button");
 var Table = require("react-bootstrap/Table");
 var Col = require("react-bootstrap/Col");
@@ -25,9 +24,10 @@ var ValueGrid = React.createClass({
 	render: function() {
 
 	var css = {
-		'width' : '100%',
+		'width' : '90%',
 		'margin-left' : '5px',
-		'margin-right' : '5px'
+		'margin-right' : '5px',
+        'font-size' : '70%'
 	};
 
 	var minHeight = {//min-height not working so used height
@@ -37,33 +37,14 @@ var ValueGrid = React.createClass({
     var numCols = this.props.numCols;
     var rows = [];
     var vals = this.props.values;
-    console.log('vals is ', vals);
 
-    // var getMat = function(numCols, vals){
-
-    // 	var mat = [];
     	if(vals != null){
-    	for(var i = 0; i < vals.length; i ++){
-    		var row = Math.floor(i / numCols);
-            if(rows.length - 1 < row) { rows[row] = []; }
-            rows[row].push(vals[i].replace(/"/g, ""));
-
-            // //var temp = [];
-    		// //for (var j = 0; j < numCols; j ++){
-    		// 	if (vals[i] === "\"\""){
-    		// 		temp.push( );
-    		// 	}else{
-      //               console.log(vals[i]);
-    		// 		temp.push(vals[i]);    				
-    		// 	}
-    		// //}
-    		// mat.push(temp);
+        	for(var i = 0; i < vals.length; i ++){
+        		var row = Math.floor(i / numCols);
+                if(rows.length - 1 < row) { rows[row] = []; }
+                rows[row].push(vals[i].replace(/"/g, ""));
+        	}
     	}
-    	}
-    // 	return mat;
-    // }
-
-    //var mat = getMat(numCols, vals);
 
     var gridTh = function(rowVals){
     	return _.map(rowVals, function(val){

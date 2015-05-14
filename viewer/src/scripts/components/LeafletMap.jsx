@@ -69,7 +69,8 @@ var LeafletMap = React.createClass({
     var latLng = this.map.layerPointToLatLng(mousePoint);
     $.get(this.props.Url + "/valuegrid?layer=" + active.entry.layer.name + "&zoom=" + active.entry.layer.zoom + "&x=" + latLng.lng + "&y=" + latLng.lat + "&size=3", 
       function(data) {
-        this.setState({ values: data.values, numCols: data.numCols }) 
+        this.setState({ mapClick: true, values: data.values, numCols: data.numCols }); 
+        this.props.onClick(this);
        }.bind(this)
     );
   },
@@ -109,9 +110,7 @@ var LeafletMap = React.createClass({
     } 
     
     return (
-      <ModalTrigger modal={<ValueModal values = {this.state.values} numCols = {this.state.numCols}/>}>
-      <div className="leafletMap" id="map" onClick={this.valuegrid} />
-       </ModalTrigger>
+      <div mapClick={this.state.mapClick} className="leafletMap" values = {this.state.values} numCols = {this.state.numCols} id="map" onClick={this.valuegrid} />
     );
   }
 });

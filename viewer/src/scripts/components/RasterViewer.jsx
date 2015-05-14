@@ -8,9 +8,10 @@ var React = require('react');
 var LeafletMap = require('./LeafletMap.jsx');
 var Catalog = require('./Catalog.jsx');
 var Layers = require('./Layers.jsx');
-var ValueModal = require('./ValueModal.jsx');
+var ValueAccordian = require('./ValueAccordian.jsx');
 var ValueGrid = require('./ValueGrid.jsx');
 var Input = require("react-bootstrap/Input");
+var Accordion = require("react-bootstrap/Accordion");
 var TabbedArea = require("react-bootstrap/TabbedArea");
 var TabPane = require("react-bootstrap/TabPane");
 var Cursor = require('react-cursor').Cursor;
@@ -30,7 +31,9 @@ var RasterViewer = React.createClass({
       active: {
         entry:  null,
         band:   null
-      }      
+      },
+      values : null,
+    numCols : null     
     }
   },
 
@@ -51,19 +54,30 @@ var RasterViewer = React.createClass({
     var url = this.refs.url.getValue();
     $.get(url + "/catalog/", 
       function(result) {
-        if (this.isMounted()) { this.setState({ catalog: result, url: url }) }
+        if (this.isMounted()) { this.setState({ mapClick: false, catalog: result, url: url }) }
       }.bind(this)
     );
   },
 
+  handleMouseClick: function(childComponent) {  
+    this.setState({ mapClick: true,
+      values : childComponent.state.values,
+    numCols : childComponent.state.numCols
+    });
+  },
+
+
   render: function() { 
     var self = this;
     var cursor = Cursor.build(this);
+   var items = [{ content: <ValueGrid values = {this.state.values} numCols = {this.state.numCols}/>}];
+    
+    
     return (
       <div className="row">
 
         <div className="col-md-9">
-          <LeafletMap Url={this.state.url} tmsUrl={this.state.url + "/tms"} active={this.state.active} randomVar ={self.handleLayersUrl} /> 
+          <LeafletMap onClick={self.handleMouseClick} Url={this.state.url} tmsUrl={this.state.url + "/tms"} values = {this.state.values} numCols = {this.state.numCols} active={this.state.active} layers ={self.handleLayersUrl} /> 
         </div>
 
         <div className="col-md-3">
@@ -75,7 +89,15 @@ var RasterViewer = React.createClass({
             labelClassName="label-class" 
             onChange={self.handleChangeCatalogUrl} />
         
+            <div>
+                <ValueAccordian mapClick={this.state.mapClick} items={items} className="test" itemClassName="test-item" />
+            </div>
+
           <Catalog catalog={this.state.catalog} url={this.state.url} active={cursor.refine('active')} /> 
+          
+
+
+
         </div>
       </div>
     )}
